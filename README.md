@@ -1,0 +1,2 @@
+# SectorDeveloping
+开发EuroScope扇区文件时用到的一些python脚本
