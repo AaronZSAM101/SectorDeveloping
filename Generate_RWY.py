@@ -87,13 +87,16 @@ with open('output.txt', 'w', encoding='utf-8') as output_file:
 
 print("多余数据删除完成")
 
-'''
+
 with open('output.txt', 'r', encoding='utf-8') as input_file:
     lines = input_file.readlines()
-dd=int(str[1:3])
-ms=int(str[3:5])
-ss=round(float(str[5:]),3)
-EuroScopeFormat=f"{str[0]}{dd}.{ms}.{ss}"
+latdd=int(str[1:3])
+latmm=int(str[3:5])
+latss=round(float(str[5:]),3)
+longdd=int(str[1:3])
+longmm=int(str[3:5])
+longss=round(float(str[5:]),3)
+EuroScopeFormat=f"{str[0]}{latdd}.{latmm}.{latss}"
 
 with open('rwy.txt', 'w', encoding='gbk') as output_file:
         parts = coord.split('.')
@@ -101,4 +104,3 @@ with open('rwy.txt', 'w', encoding='gbk') as output_file:
         output_file.write(new_coord + '\n')
 
 print("坐标已转换并保存到output_coordinates.txt文件中。")
-'''
