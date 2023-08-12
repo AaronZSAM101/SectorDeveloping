@@ -1,9 +1,14 @@
-def convert_coordinates(coord_str):
-    degree = int(coord_str[:3])
-    minute = int(coord_str[3:5])
-    seconds = float(coord_str[5:])
-    converted_seconds = round((seconds * 60), 3)
-    return f"{degree:03d}.{minute:02d}.{converted_seconds:06.3f}"
+# format = lat/lon
+def convert_coordinates(coord_str, format):
+    if format == "lat":
+        degree = int(coord_str[:2])
+        minute = int(coord_str[2:4])
+        seconds = float(coord_str[4:])
+    else:
+        degree = int(coord_str[:3])
+        minute = int(coord_str[3:5])
+        seconds = float(coord_str[5:])
+    return f"{degree:03d}.{minute:02d}.{seconds:06.3f}"
 
 input_filename = "output.txt"
 output_filename = "rwy.txt"
@@ -14,8 +19,11 @@ with open(input_filename, "r", encoding='utf-8') as input_file, open(output_file
         converted_parts = []
 
         for part in parts:
-            if part.startswith("N") or part.startswith("E"):
-                converted_part = convert_coordinates(part[1:])
+            if part.startswith("N"):
+                converted_part = convert_coordinates(part[1:], "lat")
+                converted_parts.append(part[0] + converted_part)
+            elif part.startswith("E"):
+                converted_part = convert_coordinates(part[1:], "lon")
                 converted_parts.append(part[0] + converted_part)
             else:
                 converted_parts.append(part)
