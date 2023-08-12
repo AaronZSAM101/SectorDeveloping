@@ -96,11 +96,11 @@ latss=round(float(str[5:]),3)
 longdd=int(str[1:3])
 longmm=int(str[3:5])
 longss=round(float(str[5:]),3)
-EuroScopeFormat=f"{str[0]}{latdd}.{latmm}.{latss}"
+EuroScopeFormat=f"{str[0]}N{latdd}.{latmm}.{latss} E{longdd}.{longmm}.{longss}"
 
 with open('rwy.txt', 'w', encoding='gbk') as output_file:
-        parts = coord.split('.')
-        new_coord = f'N{parts[0]:03d}.{parts[1]:02d}.{parts[2]:02d}.{parts[3]} E{parts[0]:03d}.{parts[1]:02d}.{parts[2]:02d}.{parts[3]}'
+
+        new_coord = f'{EuroScopeFormat}'
         output_file.write(new_coord + '\n')
 
-print("坐标已转换并保存到output_coordinates.txt文件中。")
+print("坐标已转换并保存到rwy.txt文件中。")
