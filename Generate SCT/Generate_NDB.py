@@ -1,4 +1,5 @@
 import sqlite3
+import os
 # 读取数据库
 ## 打开数据库连接
 DATABASEadress = input("Database Adress:")
@@ -53,4 +54,7 @@ with open(input_filename, "r", encoding='utf-8') as input_file, open(output_file
 
         output_line = ' '.join(converted_parts)
         output_file.write(output_line + "\n")
+# 整理文件
+os.remove('NDB.txt')
+os.rename('NDBoutput.txt', 'NDB.txt')
 print('NDB文件生成完毕，按任意键退出！')
