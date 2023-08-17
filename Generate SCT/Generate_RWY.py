@@ -130,9 +130,8 @@ os.remove('output.txt')
 os.remove('output.csv')
 
 # 添加澳门跑道
-VMMC_Runway = '''[RUNWAY]\n;NOT IN DATABASE\n16 34 164 344 N022.09.38.311 E113.35.14.139 N022.08.17.458 E113.35.43.911 VMMC 澳门\n01 19 014 194 N023.04.16.054 E113.04.06.233 N023.05.45.236 E113.04.26.242 ZGFS 佛山\n;IN DATABASE\n'''
-with open('rwy.txt', 'r+', encoding='utf-8') as file:
+Append_Runway = '''[RUNWAY]\n;NOT IN DATABASE\n16 34 164 344 N022.09.38.311 E113.35.14.139 N022.08.17.458 E113.35.43.911 VMMC 澳门\n01 19 014 194 N023.04.16.054 E113.04.06.233 N023.05.45.236 E113.04.26.242 ZGFS 佛山\n;IN DATABASE\n'''
+with open('rwy.txt', 'w', encoding='gbk') as file:
     DATABASEcontent = "".join(sorted_data)
-    file.seek(0,0)
-    file.write(VMMC_Runway + DATABASEcontent)
+    file.write(Append_Runway + DATABASEcontent)
 input("跑道文件生成成功！按任意键退出")
