@@ -1,9 +1,10 @@
 import sqlite3
 import os
+
 # 读取数据库
 ## 打开数据库连接
-DATABASEadress = input("Database Adress:")
-conn = sqlite3.connect(DATABASEadress)
+DATABASEaddress = input("Database Address:")
+conn = sqlite3.connect(DATABASEaddress)
 cursor = conn.cursor()
 ## 读取相关数据
 cursor.execute('SELECT CODE_ID, VAL_FREQ, GEO_LAT_ACCURACY, GEO_LONG_ACCURACY FROM VOR ORDER BY CODE_ID')

@@ -4,8 +4,8 @@ import csv
 import os
 # 读取数据库
 ## 打开数据库连接
-DATABASEadress = input("Database Adress:")
-conn = sqlite3.connect(DATABASEadress)
+DATABASEaddress = input("Database Address:")
+conn = sqlite3.connect(DATABASEaddress)
 cursor = conn.cursor()
 ## 读取表AD_HP的AD_HP_ID、CODE_ID、TXT_NAME
 cursor.execute('SELECT AD_HP_ID, CODE_ID, TXT_NAME FROM AD_HP')

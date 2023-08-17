@@ -2,8 +2,8 @@ import sqlite3
 import os
 # 从数据库读取数据
 ## 打开数据库连接
-DATABASEadress = input("Database Adress:")
-conn = sqlite3.connect(DATABASEadress)
+DATABASEaddress = input("Database Address:")
+conn = sqlite3.connect(DATABASEaddress)
 cursor = conn.cursor()
 ## 读取相关数据
 cursor.execute('''SELECT CODE_ID,GEO_LAT_ACCURACY,GEO_LONG_ACCURACY,round(VAL_ELEV*3.281, 3) AS 'VAL_ELEV_FEET' 
