@@ -2,4 +2,5 @@ rwy.txt
 ~$*.xlsx
 /ASR BaseFile
 /Generate SCT/Example.txt
-NDBoutput.txt
+NDB.txt
+VOR.txt
