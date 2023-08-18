@@ -1,7 +1,13 @@
-rwy.txt
+# For ES 点坐标生成文档.xlsx 的 缓存文件
 ~$*.xlsx
+
+# For Generate ASR
 /ASR BaseFile
+
+# For Generate SCT
 /Generate SCT/Example.txt
+rwy.txt
 NDB.txt
 VOR.txt
 AD.txt
+FIX.txt
