@@ -44,7 +44,8 @@ with open(input_filename, "r", encoding='utf-8') as input_file, open(output_file
         converted_parts = []
         for part in parts:
             try:
-                if part.startswith("N"):
+                if part.startswith("N") and len(part) > 4:
+                    # len(part) > 4 的原因是N892
                     converted_part = convert_coordinates(part[1:], "lat")
                     converted_parts.append(part[0] + converted_part)
                 elif part.startswith("E"):
