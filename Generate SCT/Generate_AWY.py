@@ -6,10 +6,12 @@ DATABASEaddress = input("Database Address:")
 conn = sqlite3.connect(DATABASEaddress)
 cursor = conn.cursor()
 ## 读取相关数据
-cursor.execute('''SELECT GEO_LAT_START_ACCURACY, GEO_LONG_START_ACCURACY, GEO_LAT_END_ACCURACY, GEO_LONG_END_ACCURACY, TXT_DESIG
-               FROM RTE_SEG
+cursor.execute('''SELECT GEO_LAT_START_ACCURACY, GEO_LONG_START_ACCURACY, GEO_LAT_END_ACCURACY, GEO_LONG_END_ACCURACY, TXT_DESIG 
+               FROM RTE_SEG 
+               WHERE
+               ( TXT_DESIG NOT LIKE 'XX$' AND TXT_DESIG NOT LIKE '%FANS%' ) 
                ORDER BY TXT_DESIG;
-''')
+               ''')
 RTEdata = cursor.fetchall()
 ## 关闭数据库连接
 conn.close
