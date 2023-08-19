@@ -236,7 +236,7 @@ with open('output.csv', 'r', encoding='utf-8') as csv_file:
     data = list(csv_reader)
 ## 根据机场ICAO进行排序
 sorted_data = sorted(data, key=lambda row: row[8])
-## 将排序后的数据写入rwy.txt文件
+## 将排序后的数据写入RWY.txt文件
 with open('output.txt', 'w', encoding='utf-8') as txt_file:
     for row in sorted_data:
         txt_file.write(' '.join(row) + '\n')
@@ -268,27 +268,30 @@ def convert_coordinates(coord_str, format):
     return f"{degree:03d}.{minute:02d}.{seconds:06.3f}"
 ## 切片后数据拼合
 input_filename = "output.txt"
-output_filename = "rwy.txt"
-with open(input_filename, "r", encoding='utf-8') as input_file, open(output_filename, "w", encoding='utf-8') as output_file:
-    for line in input_file:
-        parts = line.split()
-        converted_parts = []
+output_filename = "RWY.txt"
+input_file = open(input_filename, "r", encoding='utf-8')
+output_file = open(output_filename, "w", encoding='utf-8')
+for line in input_file:
+    parts = line.split()
+    converted_parts = []
 
-        for part in parts:
-            if part.startswith("N"):
-                converted_part = convert_coordinates(part[1:], "lat")
-                converted_parts.append(part[0] + converted_part)
-            elif part.startswith("E"):
-                converted_part = convert_coordinates(part[1:], "lon")
-                converted_parts.append(part[0] + converted_part)
-            else:
-                converted_parts.append(part)
+    for part in parts:
+        if part.startswith("N"):
+            converted_part = convert_coordinates(part[1:], "lat")
+            converted_parts.append(part[0] + converted_part)
+        elif part.startswith("E"):
+            converted_part = convert_coordinates(part[1:], "lon")
+            converted_parts.append(part[0] + converted_part)
+        else:
+            converted_parts.append(part)
 
-        output_line = ' '.join(converted_parts)
-        output_file.write(output_line + "\n")
+    output_line = ' '.join(converted_parts)
+    output_file.write(output_line + "\n")
+output_file.close()
+input_file.close()
 
 ## 多跑道机场排序
-outputtxt = open('rwy.txt', 'r', encoding='utf-8')
+outputtxt = open('RWY.txt', 'r', encoding='utf-8')
 data = outputtxt
 
 def custom_sort_key(line):
@@ -302,9 +305,10 @@ os.remove('output.csv')
 
 # 添加澳门跑道
 Append_Runway = '''[RUNWAY]\n;NOT IN DATABASE\n16 34 164 344 N022.09.38.311 E113.35.14.139 N022.08.17.458 E113.35.43.911 VMMC 澳门\n01 19 014 194 N023.04.16.054 E113.04.06.233 N023.05.45.236 E113.04.26.242 ZGFS 佛山\n;IN DATABASE\n'''
-with open('rwy.txt', 'w', encoding='gbk') as file:
-    DATABASEcontent = "".join(sorted_data)
-    file.write(Append_Runway + DATABASEcontent)
+file = open('RWY.txt', 'w', encoding='gbk')
+DATABASEcontent = "".join(sorted_data)
+file.write(Append_Runway + DATABASEcontent)
+file.close()
 print("跑道文件生成完毕")
 #endregion
 
@@ -386,15 +390,16 @@ print('航路文件生成完毕')
 #endregion
 
 #region 合并所有文件
-file_names = ["NDB.txt", "VOR.txt",  "AD.txt", "RWY.txt", "FIX.txt", "RTE.txt"]
+file_names = ["NDB.txt", "VOR.txt",  "AD.txt", "FIX.txt", "RTE.txt", "RWY.txt"]
 output_file_name = f"{AIRAC_CYCLE} ES.txt"
 
-with open(output_file_name, "w", encoding='gbk') as output_file:
-    for file_name in file_names:
-        with open(file_name, "r", encoding='gbk') as input_file:
-            output_file.write(input_file.read())
+output_file = open(output_file_name, "w", encoding='gbk')
 for file_name in file_names:
+    f = open(file_name, "r", encoding='gbk')
+    output_file.write(f.read())
+    f.close()
     os.remove(file_name)
+output_file.close()
 #endregion
 
 #FOR TEST: 结束计算代码执行时间
