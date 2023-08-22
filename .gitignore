@@ -13,3 +13,7 @@ AD.txt
 FIX.txt
 RTE.txt
 *ES.txt
+
+# For Generate ICAO_Series_Files
+Generate ICAO_Series_File/Example/ICAO_Airports.txt
+Generate ICAO_Series_File/Example/icao.txt
