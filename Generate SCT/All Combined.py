@@ -398,7 +398,7 @@ for file_name in file_names:
     f = open(file_name, "r", encoding='gbk')
     output_file.write(f.read())
     f.close()
-    os.remove(file_name)
+    # os.remove(file_name)
 output_file.close()
 #endregion
 
@@ -406,4 +406,4 @@ output_file.close()
 end_time = time.time()
 execution_time = end_time - start_time
 
-print(f'{AIRAC_CYCLE}期扇区数据生成完毕，总用时{execution_time:.2f}秒.')
+input(f'{AIRAC_CYCLE}期扇区数据生成完毕，总用时{execution_time:.2f}秒.')
