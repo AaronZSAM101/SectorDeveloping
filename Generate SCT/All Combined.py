@@ -29,13 +29,16 @@ cursor.execute('''SELECT CODE_ID,GEO_LAT_ACCURACY,GEO_LONG_ACCURACY,round(VAL_EL
 ADdata = cursor.fetchall()
 ### 读取跑道数据
 #### 读取表AD_HP的AD_HP_ID、CODE_ID、TXT_NAME
-cursor.execute('SELECT AD_HP_ID, CODE_ID, TXT_NAME FROM AD_HP')
+cursor.execute('''SELECT AD_HP_ID, CODE_ID, TXT_NAME FROM AD_HP 
+               WHERE not (CODE_ID = 'ZULS')''')
 AD_HP_data = cursor.fetchall()
 #### 读取表RWY的RWY_ID、AD_HP_ID、CODE_AIRPORT
-cursor.execute('SELECT RWY_ID, AD_HP_ID FROM RWY')
+cursor.execute('''SELECT RWY_ID, AD_HP_ID FROM RWY
+               WHERE not (RWY_ID = '5b26e8f1-a3fb-45d5-80fc-5ea5ae44bac1')''')
 RWY_data = cursor.fetchall()
 #### 读取表RWY_DIRECTION的RWY_ID、TXT_DESIG、VAL_MAG_BRG、GEO_LAT、GEO_LONG
-cursor.execute('SELECT RWY_ID, TXT_DESIG, VAL_MAG_BRG, GEO_LAT, GEO_LONG FROM RWY_DIRECTION')
+cursor.execute('''SELECT RWY_ID, TXT_DESIG, VAL_MAG_BRG, GEO_LAT, GEO_LONG FROM RWY_DIRECTION
+               WHERE not (RWY_ID = '5b26e8f1-a3fb-45d5-80fc-5ea5ae44bac1')''')
 RWY_DIRECTION_data = cursor.fetchall()
 ### 读取点坐标数据
 cursor.execute('''SELECT CODE_ID, GEO_LAT_ACCURACY, GEO_LONG_ACCURACY FROM DESIGNATED_POINT WHERE CODE_TYPE = '五字代码点' OR CODE_TYPE = 'P字点' ORDER BY CODE_ID;
@@ -303,8 +306,8 @@ sorted_data = sorted(data, key=custom_sort_key)
 os.remove('output.txt')
 os.remove('output.csv')
 
-# 添加澳门跑道
-Append_Runway = '''[RUNWAY]\n;NOT IN DATABASE\n16 34 164 344 N022.09.38.311 E113.35.14.139 N022.08.17.458 E113.35.43.911 VMMC 澳门\n01 19 014 194 N023.04.16.054 E113.04.06.233 N023.05.45.236 E113.04.26.242 ZGFS 佛山\n;IN DATABASE\n'''
+# 手动添加一些跑道
+Append_Runway = '''[RUNWAY]\n;NOT IN DATABASE\n16 34 164 344 N022.09.38.311 E113.35.14.139 N022.08.17.458 E113.35.43.911 VMMC 澳门\n01 19 014 194 N023.04.16.054 E113.04.06.233 N023.05.45.236 E113.04.26.242 ZGFS 佛山\n;DATABASE DATA WRONG\n09L 27R 089 269 N029.17.51.940 E090.53.30.000 N029.17.54.130 E090.55.58.110 ZULS 拉萨/贡嘎;IN DATABASE\n'''
 file = open('RWY.txt', 'w', encoding='gbk')
 DATABASEcontent = "".join(sorted_data)
 file.write(Append_Runway + DATABASEcontent)
