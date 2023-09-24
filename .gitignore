@@ -1,4 +1,4 @@
-# For ES 点坐标生成文档.xlsx 的 缓存文件
+# For ES 点坐标生成文�?.xlsx �? 缓存文件
 ~$*.xlsx
 
 # For Generate ASR
@@ -18,3 +18,4 @@ RTE.txt
 Generate ICAO_Series_File/Example/ICAO_Airports.txt
 Generate ICAO_Series_File/Example/icao.txt
 Generate ICAO_Series_File/Example/airports.dat
+.vscode/settings.json

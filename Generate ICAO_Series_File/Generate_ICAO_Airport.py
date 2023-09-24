@@ -1,6 +1,5 @@
 import sqlite3
 import os
-from pypinyin import pyyin, Sytle
 #region 从数据库读取数据
 ## 打开数据库连接
 DATABASEaddress = input("Database Address:")
@@ -19,36 +18,34 @@ conn.close
 #region 导出结果
 ADNewdata=""
 for i in ADdata:
-    ADNewdata=f"{i[0]} {i[1]}\n"
+    ADNewdata += f"\n{i[0]}\t{i[1]}\tChina"
 #endregion
 
 #region 删除原生ICAO_Airports.txt 中 的国内机场
-with open('ICAO_Airports.txt', 'r', encoding='utf-8') as f:
-    lines=f.readlines()
-filtered_lines = []
-for line in lines:
-    if line[:2] not in ['ZB', 'ZG', 'ZH','ZJ', 'ZL', 'ZP', 'ZS', 'ZU', 'ZW', 'ZY']:
-        filtered_lines.append(lines)
+# 列出要删除的前两个字符
+ZBBB_FIR_CODE = ["ZB", "ZG", "ZH", "ZJ", "ZL", "ZP", "ZS", "ZU", "ZW", "ZY"]
 
-with open('ICAO_Airports_New.txt', 'w', encoding='utf-8') as f:
-    f.writelines(filtered_lines)
+# 打开文件以读取和写入
+with open("D:\ProgramData\Projects\SectorDeveloping\Generate ICAO_Series_File\ICAO_Airports.txt", "r+", encoding='gbk') as file:
+    # 读取文件的所有行
+    lines = file.readlines()
+
+    # 将文件指针移到文件开头
+    file.seek(0)
+
+    # 遍历每一行
+    for line in lines:
+        # 检查前两个字符是否在要删除的列表中
+        if not any(line.startswith(code) for code in ZBBB_FIR_CODE):
+            # 如果不在列表中，则将该行写入文件
+            file.write(line)
+
+    # 截断文件，以删除未使用的内容
+    file.truncate()
 #endregion
 
-#region 定义中文转拼音
-def convert_to_pinyin(text):
-    # 使用 pinyin 函数将中文文本转换为拼音列表
-    pinyin_list = pinyin(text, style=STYLE.NORMAL)
-    
-    # 从拼音列表中提取首字母并转换为大写，然后拼接成一个字符串
-    pinyin_text = ''.join([p[0] for p in pinyin_list]).upper()
-    return pinyin_text
-
-# 输入中文文本，包含斜杠分隔的多个词
-input_text = "北京/大兴"
-
-# 将输入文本按斜杠分隔成多个词，并逐个转换为拼音
-converted_text = '/'.join([convert_to_pinyin(word) for word in input_text.split('/')])
-
-# 打印转换后的拼音文本
-print(converted_text)
+#region 将读取数据库的结果写入ICAO_Airports_2309.txt中
+with open('D:\ProgramData\Projects\SectorDeveloping\Generate ICAO_Series_File\ICAO_Airports.txt', 'a+', encoding='gbk') as f:
+    f.write(ADNewdata)
 #endregion
+print('当期ICAO_Airports文件生成完成！')
