@@ -1,7 +1,11 @@
 import sqlite3
+import csv
+import pandas as pd
 import os
+import time
 #region 从数据库读取数据
 ## 打开数据库连接
+AIRAC_CYCLE = input('当前周期号:')
 DATABASEaddress = input("Database Address:")
 conn = sqlite3.connect(DATABASEaddress)
 cursor = conn.cursor()
@@ -22,30 +26,51 @@ for i in ADdata:
 #endregion
 
 #region 删除原生ICAO_Airports.txt 中 的国内机场
-# 列出要删除的前两个字符
+# 列出要删除的机场ICAO前两个字符
 ZBBB_FIR_CODE = ["ZB", "ZG", "ZH", "ZJ", "ZL", "ZP", "ZS", "ZU", "ZW", "ZY"]
 
 # 打开文件以读取和写入
-with open("D:\ProgramData\Projects\SectorDeveloping\Generate ICAO_Series_File\ICAO_Airports.txt", "r+", encoding='gbk') as file:
-    # 读取文件的所有行
+with open("ICAO_Airports.txt", "r+", errors='ignore') as file:
     lines = file.readlines()
-
-    # 将文件指针移到文件开头
     file.seek(0)
-
-    # 遍历每一行
     for line in lines:
-        # 检查前两个字符是否在要删除的列表中
         if not any(line.startswith(code) for code in ZBBB_FIR_CODE):
-            # 如果不在列表中，则将该行写入文件
             file.write(line)
-
-    # 截断文件，以删除未使用的内容
     file.truncate()
 #endregion
 
-#region 将读取数据库的结果写入ICAO_Airports_2309.txt中
-with open('D:\ProgramData\Projects\SectorDeveloping\Generate ICAO_Series_File\ICAO_Airports.txt', 'a+', encoding='gbk') as f:
+#region 删除带有分号的行
+# 打开ICAO_Airports.txt文件
+with open('ICAO_Airports.txt', 'r') as file:
+    lines = file.readlines()
+
+# 使用列表推导式筛选出不以英文分号开头的行
+filtered_lines = (line for line in lines if not line.startswith(';'))
+
+# 打开同一文件以写入筛选后的内容
+with open('ICAO_Airports.txt', 'w') as file:
+    file.writelines(filtered_lines)
+#endregion
+
+#region 将读取数据库的结果写入ICAO_Airports.txt中
+with open('ICAO_Airports.txt', 'a+', encoding='gbk') as f:
     f.write(ADNewdata)
 #endregion
+
+#region 写入注释信息
+# 打开文件以读取原始内容
+with open('ICAO_Airports.txt', 'r', encoding='gbk') as file:
+    # 读取原始内容
+    existing_content = file.read()
+
+# 在首行添加新的注释信息
+LOCAL_TIME=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+new_content = f";DATA provided by Aero-Nav & CAAC\n;CYCLE: {AIRAC_CYCLE}\n;Generate Date: {LOCAL_TIME}\n" + existing_content
+
+# 打开文件以覆盖写入新内容
+with open('ICAO_Airports.txt', 'w') as file:
+    # 写入新内容
+    file.write(new_content)
+#endregion
+
 print('当期ICAO_Airports文件生成完成！')
