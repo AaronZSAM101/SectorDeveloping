@@ -31,17 +31,49 @@ for i in ADdata:
     ADNewdata += f"{i[0]}\t{i[1]}\t{i[2]}\t{i[0]}\n"
 #endregion
 
-#region 删除原生ICAO_Airports.txt 中 的国内机场
+#region 删除原生icao.txt的国内机场和一些看起来奇奇怪怪的机场以及根本就不是机场/起降点的地方
 ##列出要删除的机场ICAO前两个字符
-ZBBB_FIR_CODE = ["ZB", "ZG", "ZH", "ZJ", "ZL", "ZP", "ZS", "ZU", "ZW", "ZY"]
-##打开文件以读取和写入
-with open("icao.txt", "r+", errors='ignore') as file:
+ZBBB_FIR_CODE = [
+"ZB", "ZG", "ZH", "ZJ", "ZL", "ZP", "ZS", "ZU", "ZW", "ZY",
+"ZZ"
+]
+IGNORE_AERONAV_ARPT = [
+"8V", "2W", "6C", "1O", "55", "9K", "6T", "4F", "3T", "02",
+"3K", "2L", "4W", "6X", "7I", "5P", "7C", "86", "9O", "48",
+"1T", "2O", "03", "9M", "94", "75", "14", "9N", "5K", "0A",
+"61", "40", "5X", "62", "6W", "7M", "8F", "5I", "8O", "3I",
+"22", "31", "64", "98", "6K", "4A", "7O", "00", "1L", "4M",
+"3X", "2A", "33", "88", "19", "90", "93", "3W", "07", "69",
+"5V", "4O", "84", "23", "2D", "AA", "4G", "47", "25", "27",
+"3F", "5S", "1V", "97", "4V", "5W", "11", "72", "0I", "2S",
+"26", "9P", "1A", "0V", "3V", "1C", "79", "68", "1X", "3N",
+"76", "95", "56", "83", "8I", "7F", "8K", "6L", "45", "67",
+"10", "8X", "80", "1M", "06", "5N", "6F", "2U", "44", "20",
+"34", "6N", "0M", "7N", "89", "5F", "78", "7P", "0N", "8A",
+"5C", "65", "3G", "21", "42", "4T", "41", "3S", "82", "1G",
+"24", "43", "29", "4X", "91", "96", "9V", "58", "9I", "6M",
+"36", "0K", "2C", "7G", "13", "4P", "7L", "2N", "5L", "04",
+"0F", "09", "5T", "1N", "37", "39", "5O", "28", "6A", "60",
+"5A", "99", "0O", "08", "38", "57", "01", "3A", "8T", "5M",
+"8C", "6G", "51", "35", "2I", "12", "18", "52", "8N", "9A",
+"05", "9C", "92", "9T", "0C", "0G", "49", "2T", "0W", "7T",
+"4N", "2K", "8G", "2M", "3P", "7X", "1I", "3M", "77", "8W",
+"66", "8P", "2X", "7W", "54", "6I", "9F", "2G", "2F", "6O",
+"3O", "1P", "87", "0L", "4K", "1S", "1F", "3L", "1W", "71",
+"7A", "6P", "5G", "30", "81", "8M", "0X", "32", "74", "7K",
+"53", "73", "0T", "17", "2P", "50", "59", "85", "4I", "15",
+"63", "16", "70", "2V", "46"
+]
+##打开要处理的文件以读取内容
+with open('icao.txt', 'r') as file:
     lines = file.readlines()
-    file.seek(0)
-    for line in lines:
-        if not any(line.startswith(code) for code in ZBBB_FIR_CODE):
-            file.write(line)
-    file.truncate()
+
+##列出要删除的前两个字符在IGNORE_AERONAV_ARPT或ZBBB_FIR_CODE中包含的行
+lines_to_delete = [line for line in lines if line[:2] in IGNORE_AERONAV_ARPT or line[:2] in ZBBB_FIR_CODE]
+
+##打开同一文件以写入不包含要删除行的内容
+with open('icao.txt', 'w') as file:
+    file.writelines(line for line in lines if line not in lines_to_delete)
 #endregion
 
 #region 删除带有分号的行
