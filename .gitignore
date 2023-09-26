@@ -1,11 +1,7 @@
-# For ES 点坐标生成文�?.xlsx �? 缓存文件
+# For ES 点坐标生成文件.xlsx 缓存文件
 ~$*.xlsx
 
-# For Generate ASR
-/ASR BaseFile
-
 # For Generate SCT
-/Generate SCT/Example.txt
 rwy.txt
 NDB.txt
 VOR.txt
@@ -15,7 +11,9 @@ RTE.txt
 *ES.txt
 
 # For Generate ICAO_Series_Files
-Generate ICAO_Series_File/Example/ICAO_Airports.txt
-Generate ICAO_Series_File/Example/icao.txt
-Generate ICAO_Series_File/Example/airports.dat
+ICAO_Airports.txt
+icao.txt
+
+# VSCode Settings
 .vscode/settings.json
+
