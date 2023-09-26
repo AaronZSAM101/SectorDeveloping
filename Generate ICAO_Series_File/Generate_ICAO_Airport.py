@@ -1,6 +1,4 @@
 import sqlite3
-import csv
-import pandas as pd
 import os
 import time
 #region 从数据库读取数据
