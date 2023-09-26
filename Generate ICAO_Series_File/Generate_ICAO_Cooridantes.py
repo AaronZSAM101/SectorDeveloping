@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import time
 #region 读取数据库中的中国大陆机场
 ## 打开数据库连接
 AIRAC_CYCLE = input('当前周期号:')
@@ -109,9 +110,27 @@ for line in lines:
     new_lines.append(new_line)
 
 # 写入新文件
-with open(f'icao_{AIRAC_CYCLE}.txt', 'a+') as file:
+with open(f'icao.txt', 'a+') as file:
     file.writelines([line + '\n' for line in new_lines])
 #endregion
+
+#region 写入注释信息
+# 打开文件以读取原始内容
+with open(f'icao.txt', 'r', encoding='gbk') as file:
+    # 读取原始内容
+    existing_content = file.read()
+
+# 在首行添加新的注释信息
+LOCAL_TIME=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+new_content = f";DATA provided by Aero-Nav & CAAC\n;CYCLE: {AIRAC_CYCLE}\n;Generate Date: {LOCAL_TIME}\n" + existing_content
+
+# 打开文件以覆盖写入新内容
+with open(f'icao.txt', 'w') as file:
+    # 写入新内容
+    file.write(new_content)
+#endregion
+
+#region 删除不必要的文件
 print(f'{AIRAC_CYCLE}期icao.txt文件生成完毕！')
 os.remove('icao_ZBBB.txt')
-os.rename(f'icao_{AIRAC_CYCLE}', 'icao.txt')
+#endregion
