@@ -66,7 +66,37 @@ conn.close()
 #endregion
 
 #region 处理CSDT导出的航路文件
+# 打开原始的Route.csv文件以读取内容
+with open('Route.csv', 'r', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    route_data = list(reader)
 
+# 打开名为2309.txt的文件进行处理
+with open('2309.txt', 'r', encoding='gbk') as file:
+    lines = file.readlines()
+
+# 处理每一行并将其合并到Route.csv中
+for line in lines:
+    # 将分号替换为制表符，并按制表符分割行
+    parts = line.replace(';', '\t').strip().split('\t')
+    
+    # 确保行至少包含两列
+    if len(parts) >= 2:
+        # 提取第一个列的值（对应Name列）
+        name = parts[0]
+        
+        # 提取第二个列的值（对应Route列）
+        route = parts[1]
+        
+        # 将新数据添加到Route数据列表中
+        route_data.append({'Dep': '', 'Arr': '', 'Name': name, 'EvenOdd': '', 'AltList': '', 'MinAlt': '', 'Route': route, 'Remarks': ''})
+
+# 写回合并后的数据到Route.csv文件中
+with open('Route.csv', 'w', newline='') as csvfile:
+    fieldnames = ['Dep', 'Arr', 'Name', 'EvenOdd', 'AltList', 'MinAlt', 'Route', 'Remarks']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(route_data)
 #endregion
 
 #FOR TEST: 结束计算代码执行时间
