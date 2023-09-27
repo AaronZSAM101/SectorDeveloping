@@ -67,7 +67,7 @@ conn.close()
 
 #region 处理CSDT导出的航路文件
 # 打开名为2309.txt的文件进行处理
-with open('2309.txt', 'r') as file:
+with open(f'{AIRAC_CYCLE}.txt', 'r', encoding='gbk') as file:
     lines = file.readlines()
 
 # 打开原始的Route.csv文件以读取内容
