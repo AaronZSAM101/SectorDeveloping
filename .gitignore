@@ -17,3 +17,5 @@ icao.txt
 # VSCode Settings
 .vscode/settings.json
 
+# For Generate MTEPlugin Files
+Route.csv
