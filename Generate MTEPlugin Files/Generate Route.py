@@ -69,15 +69,12 @@ conn.close()
 # 打开名为2309.txt的文件进行处理
 with open(f'{AIRAC_CYCLE}.txt', 'r', encoding='gbk') as file:
     lines = file.readlines()
-
 # 打开原始的Route.csv文件以读取内容
 with open('Route.csv', 'r', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     route_data = list(reader)
-
 # 创建一个字典，以Route.csv文件的Name列为键，2309.txt文件的第二列为值
 name_to_route = {row['Name']: '' for row in route_data}
-
 # 处理每一行并将其填充到Route.csv中
 for line in lines:
     # 将分号替换为制表符，并按制表符分割行
@@ -94,12 +91,20 @@ for line in lines:
         # 检查Route.csv中是否存在匹配的Name
         if name_from_txt in name_to_route:
             name_to_route[name_from_txt] = route_from_txt
-
 # 更新Route.csv中的Route列
 for row in route_data:
     name = row['Name']
     if name in name_to_route:
         row['Route'] = name_to_route[name]
+# 在填充完成后，处理Arr列小于5个字符的行
+for row in route_data:
+    arr_value = row['Arr']
+    if len(arr_value) < 5:
+        # 找到Route列中最后一个空格的位置
+        last_space_index = row['Route'].rfind(' ')
+        if last_space_index != -1:
+            # 删除最后一个空格后的内容
+            row['Route'] = row['Route'][:last_space_index]
 
 # 写回合并后的数据到Route.csv文件中
 with open('Route.csv', 'w', newline='') as csvfile:
