@@ -105,8 +105,9 @@ for row in route_data:
         if last_space_index != -1:
             # 删除最后一个空格后的内容
             row['Route'] = row['Route'][:last_space_index]
+#endregion
 
-# 写回合并后的数据到Route.csv文件中
+#region 写回合并后的数据到Route.csv文件中
 with open('Route.csv', 'w', newline='') as csvfile:
     fieldnames = ['Dep', 'Arr', 'Name', 'EvenOdd', 'AltList', 'MinAlt', 'Route', 'Remarks']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
