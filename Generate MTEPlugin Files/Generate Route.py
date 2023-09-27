@@ -78,4 +78,13 @@ WHERE
     LENGTH(StartAirportID) = 4
     AND not (StartAirportID LIKE 'RC%' OR StartAirportID LIKE 'VH%' or StartAirportID LIKE 'VM%' OR StartAirportID  = 'ZAO');
 ''')
+RTEdata = cursor.fetchall()
+conn.close
+#endregion
+
+#region 导出数据
+RTENewdata = ''
+for i in RTEdata:
+    RTENewdata += f",,{i[0]},,{i[3]},{i[1]},,{i[2]}\n"
+print(RTENewdata)
 #endregion
