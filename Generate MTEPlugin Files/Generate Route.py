@@ -29,38 +29,52 @@ WHERE
 RTEData = []
 for row in cursor.fetchall():
     name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id = row
-    # 将纯数字的行，数字前批量加上'S‘
-    trans_alt = re.sub(r'(\d{2})(?=/|$)', r'S\1', trans_alt)
-    
-    # 如果 AltList 列包含中文字符或者星号，将其替换为空字符串
-    if re.match(r'^[\u4e00-\u9fa5]+$', trans_alt) or '*' in trans_alt:
-        trans_alt = ''
-    else:
-        # 否则，仅保留中文后的两个数字并在前加上 'S'
-        chinese_numbers_match = re.search(r'[^\d]*(\d{2})[^\d]*', trans_alt)
-        if chinese_numbers_match:
-            trans_alt = 'S' + chinese_numbers_match.group(1)
-    
-    RTEData.append((name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id))
-#endregion
 
-#region 创建一个新的csv文件并写入刚才的查询结果
+    # 处理 Trans_Alt 列
+    if '-' not in trans_alt:
+        # 对于不带短杠的文本，在所有的数字文本前加上S
+        trans_alt = re.sub(r'(\d+)(?=/|$)', r'S\1', trans_alt)
+    else:
+        # 对于带短杠的文本，提取第一个短横杠前的文本
+        first_part = re.split(r'-', trans_alt)[0]
+        # 用正则获取所有数字组，逐个格式化（即在数字文本前加上S）
+        numbers = re.findall(r'\d+', first_part)
+        for number in numbers:
+            formatted_number = 'S' + number
+            first_part = first_part.replace(number, formatted_number, 1)
+        # 替换原始 trans_alt 为处理后的 first_part
+        trans_alt = first_part
+        # 删除：上升地段 夏 *
+    trans_alt = trans_alt.replace('上升地段', '')
+    trans_alt = trans_alt.replace('目视', '')
+    trans_alt = trans_alt.replace('夏', '')
+    if '*' in trans_alt:
+        trans_alt = ''
+        # 删除第一个 "S" 前的所有内容
+    trans_alt = re.sub(r'^.*?S', 'S', trans_alt)
+        # 替换 目视06以下 03(含)以下
+    trans_alt = trans_alt.replace('06以下', 'S06')
+    trans_alt = trans_alt.replace('03(含)以下', 'S03')
+    RTEData.append((name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id))
+# 创建一个新的csv文件并写入刚才的查询结果
 with open('Route.csv', 'w', newline='') as csvfile:
     fieldnames = ['Dep', 'Arr', 'Name', 'EvenOdd', 'AltList', 'MinAlt', 'Route', 'Remarks']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     for FilledData in RTEData:
         writer.writerow(
-        {'Dep': FilledData[4],
-        'Arr': FilledData[5],
-        'Name': FilledData[0],
-        'EvenOdd': '',
-        'AltList': FilledData[3],
-        'MinAlt': FilledData[1],
-        'Route': '',
-        'Remarks': FilledData[2]
-    }
-    )
+            {
+                'Dep': FilledData[4],
+                'Arr': FilledData[5],
+                'Name': FilledData[0],
+                'EvenOdd': '',
+                'AltList': FilledData[3],
+                'MinAlt': FilledData[1],
+                'Route': '',
+                'Remarks': FilledData[2],
+            }
+        )
+
 # 关闭数据库连接
 conn.close()
 #endregion
