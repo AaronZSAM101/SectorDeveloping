@@ -21,6 +21,6 @@ icao.txt
 Route.csv
 *.txt
 Generate MTEPlugin Files/Route Generator
-Generate MTEPlugin Files/EvevOddCalculate/Extractor.py
 FLIGHT_AIRLINE_EVENODD.csv
 FLIGHT_AIRLINE_POINT.csv
+Extractor.py
