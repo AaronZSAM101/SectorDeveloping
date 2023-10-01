@@ -3,14 +3,12 @@ import re
 import csv
 import time
 #region 读取数据
-##读取数据库
+# 读取数据库
 AIRAC_CYCLE = input('当前周期号:')
 DATABASEadress = input(f'{AIRAC_CYCLE}期数据库地址:')
-#FOR TEST: 开始计算代码执行时间
-start_time = time.time()
+start_time = time.time() #FOR TEST: 开始计算代码执行时间
 conn = sqlite3.connect(DATABASEadress)
 cursor = conn.cursor()
-# 执行查询
 cursor.execute('''
 SELECT
     name,
@@ -25,25 +23,26 @@ WHERE
     LENGTH(StartAirportID) = 4
     AND NOT (StartAirportID LIKE 'RC%' OR StartAirportID LIKE 'VH%' OR StartAirportID = 'VMMC' OR StartAirportID LIKE 'ZAO%');
 ''')
-# 处理查询结果并进行正则表达式替换
+#endregion
+
+#region 处理查询结果并进行正则表达式替换
 RTEData = []
 for row in cursor.fetchall():
     name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id = row
 
     # 处理 Trans_Alt 列
     if '-' not in trans_alt:
-        # 对于不带短杠的文本，在所有的数字文本前加上S
-        trans_alt = re.sub(r'(\d+)(?=/|$)', r'S\1', trans_alt)
+        trans_alt = re.sub(r'(\d+)(?=/|$)', r'S\1', trans_alt) # 对于不带短杠的文本，在所有的数字文本前加上S
     else:
-        # 对于带短杠的文本，提取第一个短横杠前的文本
-        first_part = re.split(r'-', trans_alt)[0]
-        # 用正则获取所有数字组，逐个格式化（即在数字文本前加上S）
+        first_part = re.split(r'-', trans_alt)[0] # 对于带短杠的文本，提取第一个短横杠前的文本
+        # 用正则获取所有数字组，逐个格式化（即在数字文本前加上S） 
         numbers = re.findall(r'\d+', first_part)
         for number in numbers:
             formatted_number = 'S' + number
             first_part = first_part.replace(number, formatted_number, 1)
         # 替换原始 trans_alt 为处理后的 first_part
         trans_alt = first_part
+
         # 删除：上升地段 夏 *
     trans_alt = trans_alt.replace('上升地段', '')
     trans_alt = trans_alt.replace('目视', '')
@@ -56,8 +55,8 @@ for row in cursor.fetchall():
     trans_alt = trans_alt.replace('06以下', 'S06')
     trans_alt = trans_alt.replace('03(含)以下', 'S03')
     RTEData.append((name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id))
-# 创建一个新的csv文件并写入刚才的查询结果
-with open('Route.csv', 'w', newline='') as csvfile:
+
+with open('Route.csv', 'w', newline='') as csvfile: # 创建一个新的csv文件并写入刚才的查询结果
     fieldnames = ['Dep', 'Arr', 'Name', 'EvenOdd', 'AltList', 'MinAlt', 'Route', 'Remarks']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
@@ -74,36 +73,27 @@ with open('Route.csv', 'w', newline='') as csvfile:
                 'Remarks': FilledData[2],
             }
         )
-
-# 关闭数据库连接
-conn.close()
+conn.close() # 关闭数据库连接
 #endregion
 
 #region 处理CSDT导出的航路文件
-# 打开名为2309.txt的文件进行处理
+# 打开名航路文件进行处理
 with open(f'{AIRAC_CYCLE}.txt', 'r', encoding='gbk') as file:
     lines = file.readlines()
 # 打开原始的Route.csv文件以读取内容
 with open('Route.csv', 'r', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     route_data = list(reader)
-# 创建一个字典，以Route.csv文件的Name列为键，2309.txt文件的第二列为值
+# 创建一个字典，以Route.csv文件的Name列为键，航路文件的第二列为值
 name_to_route = {row['Name']: '' for row in route_data}
 # 处理每一行并将其填充到Route.csv中
 for line in lines:
     # 将分号替换为制表符，并按制表符分割行
     parts = line.replace(';', '\t').strip().split('\t')
-    
-    # 确保行至少包含两列
-    if len(parts) >= 2:
-        # 提取第一个列的值
-        name_from_txt = parts[0]
-        
-        # 提取第二个列的值（对应Route列）
-        route_from_txt = parts[1]
-        
-        # 检查Route.csv中是否存在匹配的Name
-        if name_from_txt in name_to_route:
+    if len(parts) >= 2: # 确保行至少包含两列
+        name_from_txt = parts[0] # 提取第一个列的值
+        route_from_txt = parts[1] # 提取第二个列的值（对应Route列）
+        if name_from_txt in name_to_route: # 检查Route.csv中是否存在匹配的Name
             name_to_route[name_from_txt] = route_from_txt
 # 更新Route.csv中的Route列
 for row in route_data:
@@ -133,4 +123,4 @@ with open('Route.csv', 'w', newline='') as csvfile:
 end_time = time.time()
 execution_time = end_time - start_time
 
-input(f'{AIRAC_CYCLE}期扇区数据生成完毕，总用时{execution_time:.2f}秒.')
+input(f'{AIRAC_CYCLE}期MTEP航路检查数据生成完毕，总用时{execution_time:.2f}秒.')
