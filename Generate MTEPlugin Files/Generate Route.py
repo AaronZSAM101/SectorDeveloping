@@ -126,7 +126,7 @@ print_with_timestamp('查询结果已写入Route.csv，正在处理Route列数�
 
 #region 处理航路文件
 # 打开CSDT航路文件进行处理
-with open((f'{AIRAC_CYCLE}.txt'), 'r', encoding='gbk') as file:
+with open((f'{AIRAC_CYCLE}.txt'), 'r', encoding='utf-8') as file:
     lines = file.readlines()
 # 打开原始的Route.csv文件以读取内容
 with open(('Route.csv'), 'r', newline='', encoding='utf-8') as csvfile:
@@ -188,7 +188,7 @@ for row in route_data:
     row['Arr'] = '/'.join(new_arr_values)  # 用新的Arr值更新数据
 
 # 处理航路文件并更新Route列
-with open((f'{AIRAC_CYCLE}.txt'), 'r', encoding='gbk') as file:
+with open((f'{AIRAC_CYCLE}.txt'), 'r', encoding='utf-8') as file:
     lines = file.readlines()
 for row in route_data:
     name = row['Name']
