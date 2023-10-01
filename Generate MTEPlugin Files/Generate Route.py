@@ -16,7 +16,8 @@ SELECT
     "RESTRICT",
     TRANS_ALT,
     StartAirportID,
-    EndAirportID
+    EndAirportID,
+    END_CITY
 FROM
     FLIGHT_AIRLINE
 WHERE
@@ -28,7 +29,7 @@ WHERE
 #region 处理查询结果并进行正则表达式替换
 RTEData = []
 for row in cursor.fetchall():
-    name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id = row
+    name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id, end_city = row
 
     # 处理 Trans_Alt 列
     if '-' not in trans_alt:
@@ -54,7 +55,25 @@ for row in cursor.fetchall():
         # 替换 目视06以下 03(含)以下
     trans_alt = trans_alt.replace('06以下', 'S06')
     trans_alt = trans_alt.replace('03(含)以下', 'S03')
-    RTEData.append((name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id))
+
+    # 处理Arr列
+    if len(end_airport_id) == 5:
+        arr_value = end_city
+    else:
+        arr_value = end_airport_id
+
+    RTEData.append(
+        {
+        'Dep': start_airport_id,    
+        'Arr': arr_value, 
+        'Name': name, 
+        'EvenOdd': '',
+        'AltList': trans_alt,
+        'MinAlt': min_safe_altitude,
+        'Route': '',
+        'Remarks': restrict,
+        }
+    )
 
 with open('Route.csv', 'w', newline='') as csvfile: # 创建一个新的csv文件并写入刚才的查询结果
     fieldnames = ['Dep', 'Arr', 'Name', 'EvenOdd', 'AltList', 'MinAlt', 'Route', 'Remarks']
@@ -63,21 +82,21 @@ with open('Route.csv', 'w', newline='') as csvfile: # 创建一个新的csv文�
     for FilledData in RTEData:
         writer.writerow(
             {
-                'Dep': FilledData[4],
-                'Arr': FilledData[5],
-                'Name': FilledData[0],
+                'Dep': FilledData['Dep'],
+                'Arr': FilledData['Arr'],
+                'Name': FilledData['Name'],
                 'EvenOdd': '',
-                'AltList': FilledData[3],
-                'MinAlt': FilledData[1],
+                'AltList': FilledData['AltList'],
+                'MinAlt': FilledData['MinAlt'],
                 'Route': '',
-                'Remarks': FilledData[2],
+                'Remarks': FilledData['Remarks'],
             }
         )
 conn.close() # 关闭数据库连接
 #endregion
 
-#region 处理CSDT导出的航路文件
-# 打开名航路文件进行处理
+#region 处理航路文件
+# 打开CSDT航路文件进行处理
 with open(f'{AIRAC_CYCLE}.txt', 'r', encoding='gbk') as file:
     lines = file.readlines()
 # 打开原始的Route.csv文件以读取内容
@@ -88,8 +107,7 @@ with open('Route.csv', 'r', newline='') as csvfile:
 name_to_route = {row['Name']: '' for row in route_data}
 # 处理每一行并将其填充到Route.csv中
 for line in lines:
-    # 将分号替换为制表符，并按制表符分割行
-    parts = line.replace(';', '\t').strip().split('\t')
+    parts = line.replace(';', '\t').strip().split('\t') # 将分号替换为制表符，并按制表符分割行
     if len(parts) >= 2: # 确保行至少包含两列
         name_from_txt = parts[0] # 提取第一个列的值
         route_from_txt = parts[1] # 提取第二个列的值（对应Route列）
@@ -100,7 +118,7 @@ for row in route_data:
     name = row['Name']
     if name in name_to_route:
         row['Route'] = name_to_route[name]
-# 在填充完成后，处理Arr列小于5个字符的行
+# 在填充完成后，处理Arr列小于5个字符的行所对应的Route
 for row in route_data:
     arr_value = row['Arr']
     if len(arr_value) < 5:
