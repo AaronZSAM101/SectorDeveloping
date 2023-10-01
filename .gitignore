@@ -19,5 +19,6 @@ icao.txt
 
 # For Generate MTEPlugin Files
 Route.csv
-2309.txt
+*.txt
 Generate MTEPlugin Files/Route Generator
+Generate MTEPlugin Files/EvevOddCalculate/Extractor.py
