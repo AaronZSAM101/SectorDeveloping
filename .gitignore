@@ -20,7 +20,6 @@ ICAO_Airlines.txt
 
 # For Generate MTEPlugin Files
 Route.csv
-*.txt
 Generate MTEPlugin Files/Route Generator
 FLIGHT_AIRLINE_EVENODD.csv
 FLIGHT_AIRLINE_POINT.csv
