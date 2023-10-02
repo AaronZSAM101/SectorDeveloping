@@ -13,6 +13,7 @@ RTE.txt
 # For Generate ICAO_Series_Files
 ICAO_Airports.txt
 icao.txt
+ICAO_Airlines.txt
 
 # VSCode Settings
 .vscode/settings.json
