@@ -26,6 +26,7 @@ SELECT
     name,
     ROUND(MinSafeAltitude * 3.281) AS 'MinSafeAltitude',
     "RESTRICT",
+    "Remarks"
     TRANS_ALT,
     StartAirportID,
     EndAirportID,
@@ -54,7 +55,7 @@ print_with_timestamp('数据库读取完成，正在进行AltList和TransAlt的�
 #region 处理查询结果并将数字进行正则表达式替换
 RTEData = []
 for row in cursor.fetchall():
-    name, min_safe_altitude, restrict, trans_alt, start_airport_id, end_airport_id, end_city = row
+    name, min_safe_altitude, restrict, remarks, trans_alt, start_airport_id, end_airport_id, end_city = row
 
     # 处理 Trans_Alt 列
     if '-' not in trans_alt:
@@ -96,7 +97,7 @@ for row in cursor.fetchall():
         'AltList': trans_alt,
         'MinAlt': min_safe_altitude,
         'Route': '',
-        'Remarks': restrict,
+        'Remarks': remarks + restrict,
         }
     )
 
