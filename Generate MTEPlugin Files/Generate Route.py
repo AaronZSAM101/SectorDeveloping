@@ -194,7 +194,7 @@ for row in route_data:
 # 在填充完成后，处理Arr列小于5个字符的行所对应的Route
 for row in route_data:
     arr_value = row['Arr']
-    if len(arr_value) < 5:
+    if len(arr_value) == 4 and arr_value.startswith('Z', 'RC', 'VH', 'VM'):
         # 找到Route列中最后一个空格的位置
         last_space_index = row['Route'].rfind(' ')
         if last_space_index != -1:
