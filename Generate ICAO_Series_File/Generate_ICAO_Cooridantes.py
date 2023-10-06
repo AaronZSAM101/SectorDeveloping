@@ -65,30 +65,30 @@ IGNORE_AERONAV_ARPT = [
 "63", "16", "70", "2V", "46"
 ]
 ##打开要处理的文件以读取内容
-with open('icao.txt', 'r') as file:
+with open('icao.txt', 'r', encoding='gbk', errors='ignore') as file:
     lines = file.readlines()
 
 ##列出要删除的前两个字符在IGNORE_AERONAV_ARPT或ZBBB_FIR_CODE中包含的行
 lines_to_delete = [line for line in lines if line[:2] in IGNORE_AERONAV_ARPT or line[:2] in ZBBB_FIR_CODE]
 
 ##打开同一文件以写入不包含要删除行的内容
-with open('icao.txt', 'w') as file:
+with open('icao.txt', 'w', encoding='gbk', errors='ignore') as file:
     file.writelines(line for line in lines if line not in lines_to_delete)
 #endregion
 
 #region 删除带有分号的行
 ##打开ICAO_Airports.txt文件
-with open('icao.txt', 'r') as file:
+with open('icao.txt', 'r', encoding='gbk', errors='ignore') as file:
     lines = file.readlines()
 ##使用列表推导式筛选出不以英文分号开头的行
 filtered_lines = (line for line in lines if not line.startswith(';'))
 ## 打开同一文件以写入筛选后的内容
-with open('icao.txt', 'w') as file:
+with open('icao.txt', 'w', encoding='gbk', errors='ignore') as file:
     file.writelines(filtered_lines)
 #endregion
 
 #region 将第三列删除，并复制第一列的内容为新的第三列
-with open('icao.txt', 'r') as file:
+with open('icao.txt', 'r', encoding='gbk', errors='ignore') as file:
     lines = file.readlines()
 
 new_lines = []
@@ -100,12 +100,12 @@ for line in lines:
     new_line = '\t'.join(parts)
     new_lines.append(new_line+'\n')
 
-with open('icao.txt', 'w') as file:
+with open('icao.txt', 'w', encoding='gbk', errors='ignore') as file:
     file.writelines(new_lines)
 #endregion
 
 #region 将读取数据库的结果写入ICAO_ZBBB.txt中
-with open('icao_ZBBB.txt', 'a+', encoding='gbk') as f:
+with open('icao_ZBBB.txt', 'a+', encoding='gbk', errors='ignore') as f:
     f.write(ADNewdata)
 #endregion
 
@@ -127,7 +127,7 @@ def convert_coordinates(coord_str, format):
     return f"{degrees_in_decimal:.7f}"
 
 # 打开原始文件和新文件
-with open('icao_ZBBB.txt', 'r') as file:
+with open('icao_ZBBB.txt', 'r', encoding='gbk', errors='ignore') as file:
     lines = file.readlines()
 
 new_lines = []
@@ -142,13 +142,13 @@ for line in lines:
     new_lines.append(new_line)
 
 # 写入新文件
-with open(f'icao.txt', 'a+') as file:
+with open(f'icao.txt', 'a+', encoding='gbk', errors='ignore') as file:
     file.writelines([line + '\n' for line in new_lines])
 #endregion
 
 #region 写入注释信息
 # 打开文件以读取原始内容
-with open(f'icao.txt', 'r', encoding='gbk') as file:
+with open(f'icao.txt', 'r', encoding='gbk', errors='ignore') as file:
     # 读取原始内容
     existing_content = file.read()
 
@@ -157,7 +157,7 @@ LOCAL_TIME=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 new_content = f";DATA provided by Aero-Nav & CAAC\n;CYCLE: {AIRAC_CYCLE}\n;Generate Date: {LOCAL_TIME}\n" + existing_content
 
 # 打开文件以覆盖写入新内容
-with open(f'icao.txt', 'w') as file:
+with open(f'icao.txt', 'w', encoding='gbk', errors='ignore') as file:
     # 写入新内容
     file.write(new_content)
 #endregion
