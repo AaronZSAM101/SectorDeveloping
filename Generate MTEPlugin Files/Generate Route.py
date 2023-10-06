@@ -26,7 +26,7 @@ SELECT
     name,
     ROUND(MinSafeAltitude * 3.281) AS 'MinSafeAltitude',
     "RESTRICT",
-    "Remarks"
+    "Remarks",
     TRANS_ALT,
     StartAirportID,
     EndAirportID,
@@ -55,7 +55,7 @@ print_with_timestamp('数据库读取完成，正在进行AltList和TransAlt的�
 #region 处理查询结果并将数字进行正则表达式替换
 RTEData = []
 for row in cursor.fetchall():
-    name, min_safe_altitude, restrict, remarks, trans_alt, start_airport_id, end_airport_id, end_city = row
+    name, min_safe_altitude, remarks, restrict, trans_alt, start_airport_id, end_airport_id, end_city = row
 
     # 处理 Trans_Alt 列
     if '-' not in trans_alt:
@@ -148,15 +148,6 @@ for row in route_data:
     name = row['Name']
     if name in name_to_route:
         row['Route'] = name_to_route[name]
-# 在填充完成后，处理Arr列小于5个字符的行所对应的Route
-for row in route_data:
-    arr_value = row['Arr']
-    if len(arr_value) < 5:
-        # 找到Route列中最后一个空格的位置
-        last_space_index = row['Route'].rfind(' ')
-        if last_space_index != -1:
-            # 删除最后一个空格后的内容
-            row['Route'] = row['Route'][:last_space_index]
 #endregion
 
 print_with_timestamp('Route列数据处理完成，正在将城市名与机场ICAO进行对应...')
@@ -199,6 +190,16 @@ for row in route_data:
             if len(parts) >= 2:
                 route_from_txt = parts[1].strip()  # 提取航路信息
                 row['Route'] = route_from_txt  # 更新Route列
+
+# 在填充完成后，处理Arr列小于5个字符的行所对应的Route
+for row in route_data:
+    arr_value = row['Arr']
+    if len(arr_value) < 5:
+        # 找到Route列中最后一个空格的位置
+        last_space_index = row['Route'].rfind(' ')
+        if last_space_index != -1:
+            # 删除最后一个空格后的内容
+            row['Route'] = row['Route'][:last_space_index]
 
 # 将更新后的数据写回Route.csv文件，更新Arr和Route列
 with open(('Route.csv'), 'w', newline='', encoding='gbk') as csvfile:
