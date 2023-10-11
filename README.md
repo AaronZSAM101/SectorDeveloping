@@ -4,7 +4,7 @@
 ## Model
 Model文件夹为分为以下三个部分：
 - AlgorithmFactory（算法工厂）：存储了用于坐标转换的一些代码或文件
-- PRFFactory（Profile工厂）：存储了用于批量读写PRF文件的代码
+- ExistingFileFactory（现有文件处理工厂）：存储了用于批量读写现有文件的代码（例如：`.prf`,`.asr`）
 - TextFactory（文字部分工厂）：存储了用于大量纯文本需要批量添加相同前缀或后缀的代码（例如：MVA）
 
 当前，可用于开发的一些算法有：
@@ -29,7 +29,9 @@ Model文件夹为分为以下三个部分：
 当前已知bug：`RWY.txt`在最终处理时由于python的系统权限问题，无法将这个文件删除。目前已将删除文件的代码暂时移除，待后续解决。
 
 ## Generate MTEPlugin Files
-为实现[MTEPlugin-for-EuroScope](https://github.com/KingfuChan/MTEPlugin-for-EuroScope)（下称MTEP）的部分功能，该部分脚本通过读取NavChina数据库，与人工维护的**城市名称-机场**对应表`CityMatching.csv`进行对应，再将转换格式后的航路写入文件`Route.csv`，从而生成能够使MTEP读取的航路文件。
+为实现[MTEPlugin-for-EuroScope](https://github.com/KingfuChan/MTEPlugin-for-EuroScope)（下称**MTEP**）的功能而开发的脚本。
+### 航路检查器`Generate Route`
+该部分脚本通过读取NavChina数据库，与人工维护的**城市名称-机场**对应表`CityMatching.csv`进行对应，再将转换格式后的航路写入文件`Route.csv`，从而生成能够使MTEP读取的航路文件。
 
 `Extract City Name.py`用于读取从数据库读到的城市名称，该部分代码将合并相同的地名名称，然后打印结果以供维护。
 
