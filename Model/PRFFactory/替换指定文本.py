@@ -4,18 +4,18 @@ import os
 
 search_path = input('Please Enter the sector path:')
 target_strings = [
-'Settings\tSettingsfilePLUGINS\t\All\Settings\Plugin.txt'
+' ' #引号中输入要替换的文本
 ]
 replacement_strings = [
-'Settings\tSettingsfilePLUGINS\t\All\Settings\Plugin_Lined.txt'
+' ' # 引号中输入待替换的文本
 ]
 
 for root, dirs, files in os.walk(search_path):
     for file in files:
-        if file.endswith('.prf'):
+        if file.endswith('.txt'): #修改后缀名可实现各种类型文件的操作，修改startswith或endwith可实现以某种文件名开头的文件的处理
             file_path = os.path.join(root, file)
             updated_lines = []
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='gbk', errors='ignore') as f:
                 lines = f.readlines()
                 for line in lines:
                     updated_line = line
@@ -25,6 +25,6 @@ for root, dirs, files in os.walk(search_path):
                             break
                     updated_lines.append(updated_line)
 
-            with open(file_path, 'w') as f:
+            with open(file_path, 'w', encoding='gbk', errors='ignore') as f:
                 f.writelines(updated_lines)
 print('Mission Complete.')
