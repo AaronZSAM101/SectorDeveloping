@@ -1,13 +1,16 @@
-# 修改扇区编码集
-# 无法确保你之前写了中文之后再用该脚本转换时所有的中文字符是否能够保留
-# 所以，请时刻谨记，编辑任何扇区文件时，均使用GBK编码集进行编辑。
+"""
+修改文件编码集
+无法确保你之前写了中文之后再用该脚本转换时所有的中文字符是否能够保留
+所以，请时刻谨记，编辑任何扇区文件时，均使用GBK编码集进行编辑。
+"""
+
 import os
 
 folder_path = input('Please enter the root of your sector: ')
 
 for root, dirs, files in os.walk(folder_path):
     for file in files:
-        if file.endswith('.prf'):
+        if file.endswith('.prf'): # 修改后缀名可以进行不同类型文件操作
             file_path = os.path.join(root, file)
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
