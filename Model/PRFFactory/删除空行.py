@@ -5,7 +5,7 @@ folder_path = input('Please enter your Sector Path:')
 
 # 遍历文件夹中的文件
 for filename in os.listdir(folder_path):
-    if filename.endswith('.prf'):
+    if filename.endswith('.prf'): #修改后缀名可实现各种类型文件的操作，修改startswith或endwith可实现以某种文件名开头的文件的处理
         file_path = os.path.join(folder_path, filename)
         
         # 打开文件并读取内容
