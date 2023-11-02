@@ -43,6 +43,7 @@ CHF	天津杰普逊国际飞行学院	朝飞/CHAO FEI	CHINA
 CHH	海南航空	海南/HAINAN	CHINA
 CHJ	星联商务航空	瑞能SHINING	CHINA
 CJX	江西航空	仙鹤/AIR CRANE	CHINA
+CKJ	中国人民解放军空军	军航	CHINA
 CKK	中国货运航空	货航/CARGO KING	CHINA
 CNM	中国国际航空内蒙古公司	蒙元/MENGYUAN	CHINA
 CNW	西北国际货运航空	隋唐/TANG	CHINA
@@ -148,7 +149,7 @@ MJC	北京汉宇航空	汉宇AIR MANDA	CHINA
 MMJ	澳门国际商务航空(Macau Jet International)	MACAUJET	CHINA
 MSF	民生国际通用航空	民生/MINSHENG	CHINA
 MTJ	美捷航空	METROJET	CHINA
-MYK	北京美麟通用航空有限公司	帝麒麟MYLIN	CHINA
+MYK	北京美麟通用航空有限公司	帝麒麟/MYLIN	CHINA
 MZT	中一太客商务航空	中太/ZHONG TAI	CHINA
 NEJ	利捷公务航空	利捷/NET BUSINESS	CHINA
 NMG	天骄航空	牧歌/TIANJIAO AIR	CHINA
@@ -157,7 +158,7 @@ NSY	山东南山国际飞行有限公司	群英/QUNYING	CHINA
 OHK	香港甘泉航空(Oasis Hong Kong Virtual)	OASIS	CHINA
 OKA	奥凯航空	奥凯/OKAY JET	CHINA
 OLD	北京奥伦达部落通航	奥伦达/AIR ORENDA	CHINA
-OMA	中国人民解放军空军/OMAN AIR	军航/AIR FORCE/OMAN AIR	CHINA
+OMA	中国人民解放军空军/OMAN AIR	军航/AIR FORCE/OMAN AIR	CHINA/OMAN
 OTC	湖南航空	乐程/AIR TRAVEL	CHINA
 OTT	一二三航空	齐嘉/OTT AIRLINES	CHINA
 OUF	北京欧法国际商务航空	ELEMENT	CHINA
